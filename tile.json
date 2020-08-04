@@ -1,0 +1,20 @@
+{
+	"name": "Ordnance Survey OpenData (nt27ne)",
+	"description": "",
+	"attribution": "OpenMapStreet && MapboxGl",
+	"type": "overlay",
+	"version": "1",
+	"format": "pbf",
+	"minzoom": 11,
+	"maxzoom": 14,
+	"bounds": [1.898, 41.246, 2.312, 41.533],
+	"maxBounds": [[1.898, 41.246], [2.312, 41.533]],
+	"center": "2.105, 41.3895, 14",
+	"basename": "barcelona",
+	"profile": "mercator",
+	"scale": 1,
+	"tiles": ["http://localhost:9501/RocketTile.php?action=getTile&map=barcelona&z={z}&x={x}&y={y}"],
+	"tilejson": "2.2.0",
+	"scheme": "xyz",
+	"grids": ["http://localhost/barcelona/{z}/{x}/{y}.grid.json"]
+}

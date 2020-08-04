@@ -1,0 +1,31 @@
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+    <div id='map'></div>
+    <script>
+        var bounds = [
+                [1.898, 41.246],// Southwest coordinates
+                [2.312, 41.533] // Northeast coordinates
+        ];
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'http://localhost:9501/RocketTile.php?action=getConfig&config=style.json',
+            center: [2.105, 41.3895],
+            zoom: 11,
+            maxBounds: bounds
+        });
+    </script>
+    <script src='./static/js/index_map.js'></script>
+
+</body>
+</html>
