@@ -114,16 +114,16 @@ class RocketTile
 
 	public function checkParams($params){
 		$result = true;
-		if( !isset($params['map']) || empty($params['map']) ){
+		if( !isset($params['map']) || !is_string($params['map']) ){
 			$result = false;
 		}
-		if( !isset($params['z']) || empty($params['z']) ){
+		if( !isset($params['z']) || !is_numeric($params['z']) ){
 			$result = false;
 		}
-		if( !isset($params['x']) || empty($params['x']) ){
+		if( !isset($params['x']) || !is_numeric($params['x']) ){
 			$result = false;
 		}
-		if( !isset($params['y']) || empty($params['y']) ){
+		if( !isset($params['y']) || !is_numeric($params['y']) ){
 		 	$result = false;
 		}
 		return $result;
