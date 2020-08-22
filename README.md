@@ -13,8 +13,9 @@ It's rewrote and modified with PHP extension Swoole (https://github.com/swoole/s
 
 3. The folder contains a test tileset `barcelona.mbtiles`, Using your browser to open the `map.html` and you will see a bueatiful city - Barcelona, where lives my friend Marc.
 
-# Thanks to
-
- - Swoole
+# Thanks to (alphabetic order)
+ - Mapbox
  - MapTiler
+ - Swoole
+
  
