@@ -7,68 +7,75 @@
  * 
  */
 
+use Swoole\Coroutine\Http\Server;
+use function Swoole\Coroutine\run;
 
-$http = new Swoole\Http\Server("0.0.0.0", 9501);
-$rt = new RocketTile();
+run(function () {
+	$http = new Server('0.0.0.0', 9501);
+	$rt = new RocketTile();
 
-$http->on('request', function ($request, $response) use ($rt) {
+	$http->handle('/', function ($request, $response) use ($rt) {
 
-	if($request->server['request_uri'] == '/favicon.ico') {
-		$response->status(404);
-		$response->end();
-		return;
-	}
-
-    if(!isset($request->get['action'])){
-		$response->status(404);
-		$response->end();
-		return;
-    }
-
-    if($request->get['action'] == 'getConfig' && isset($request->get['config']) ){
-    	$config_path = $rt->getConfigPath($request->get['config']);
-		if(!$config_path){
-			return $response->end('Error: the indicated config is not existed.');
-		}
-		$config = file_get_contents($config_path);
-		$response->header('Access-Control-Allow-Origin', '*');
-		$response->end($config);
-    }
-
-	if( $request->get['action'] == 'getFt' && isset($request->get['ft']) && isset($request->get['range']) ){
-    	$ft_path = $rt->getFtPath($request->get['ft'], $request->get['range']);
-		if(!$ft_path){
-			return $response->end('Error: the indicated font is not existed.');
-		}
-		$response->header('Access-Control-Allow-Origin', '*');
-		$ft = file_get_contents($ft_path);
-		$response->end($ft);
-	}
-
-	if($request->get['action'] == 'getTile' ){
-		if(!$rt->checkParams($request->get) ){
-			$response->end('Error: missing required param.');
-		}else if(!$rt->isDBLayer($request->get['map'])){
-			$response->end('Error: the map is no existed.');
-		}
-		
-		$db_res = $rt->DBconnect($request->get['map'].'.mbtiles');
-		if(!$db_res['res']){
-			$response->end('Error: db connection failed.');
+		if($request->server['request_uri'] == '/favicon.ico') {
+			$response->status(404);
+			$response->end();
+			return;
 		}
 	
-		foreach($rt->getHeaders() as $h => $v){
-			$response->header($h, $v);
+		if(!isset($request->get['action'])){
+			$response->status(404);
+			$response->end();
+			return;
 		}
-		$data = $rt->getTile($db_res['db'], $request->get['z'], $request->get['x'], $request->get['y']);
-		$response->end($data);
-	}
+	
+		if($request->get['action'] == 'getConfig' && isset($request->get['config']) ){
+			$config_path = $rt->getConfigPath($request->get['config']);
+			if(!$config_path){
+				return $response->end('Error: the indicated config is not existed.');
+			}
+			$config = file_get_contents($config_path);
+			$response->header('Access-Control-Allow-Origin', '*');
+			$response->end($config);
+		}
+	
+		if( $request->get['action'] == 'getFt' && isset($request->get['ft']) && isset($request->get['range']) ){
+			$ft_path = $rt->getFtPath($request->get['ft'], $request->get['range']);
+			if(!$ft_path){
+				return $response->end('Error: the indicated font is not existed.');
+			}
+			$response->header('Access-Control-Allow-Origin', '*');
+			$ft = file_get_contents($ft_path);
+			$response->end($ft);
+		}
+	
+		if($request->get['action'] == 'getTile' ){
+			if(!$rt->checkParams($request->get) ){
+				$response->end('Error: missing required param.');
+				return;
+			}else if(!$rt->isDBLayer($request->get['map'])){
+				$response->end('Error: the map is no existed.');
+				return;
+			}
+			
+			$db_res = $rt->DBconnect($request->get['map'].'.mbtiles');
+			if(!$db_res['res']){
+				$response->end('Error: db connection failed.');
+				return;
 
+			}
+		
+			foreach($rt->getHeaders() as $h => $v){
+				$response->header($h, $v);
+			}
+			$data = $rt->getTile($db_res['db'], $request->get['z'], $request->get['x'], $request->get['y']);
+			$response->end($data);
+			return;
+		}
+	
+	});
+	
+	$http->start();
 });
-
-$http->start();
-
-
 
 class RocketTile
 {
