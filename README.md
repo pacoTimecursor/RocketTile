@@ -1,5 +1,5 @@
 # What's new?
-2020/08/21 Coroutine Version is comming soon!
+2022/06/30 Now Coroutine Version!
 
 # RocketTile
 A PHP Tile Server,
